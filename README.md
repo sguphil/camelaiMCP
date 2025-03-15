@@ -7,14 +7,14 @@
 - 获取指定城市的当前天气
 - 获取指定坐标的当前天气
 - 获取指定城市的天气预报
-- 支持中文查询和显示
+- 支持英文地址查询和显示
 - 与 Cursor 编辑器集成
 
 ## 文件说明
 
 - `mcp_server.py`: MCP 服务器，提供天气查询功能
-- `mcp_client.py`: MCP 客户端，用于与 MCP 服务器通信
-- `cursor_weather.py`: Cursor 命令行工具，用于在 Cursor 中使用
+- `mcp_client.py`: MCP 测试客户端，用于与 MCP 服务器通信
+
 
 ## 安装
 
@@ -23,7 +23,7 @@
 确保已安装以下依赖项：
 
 ```bash
-pip install mcp httpx python-dotenv
+pip install -r requirements.txt
 ```
 
 ### 配置
@@ -42,60 +42,34 @@ OPENWEATHERMAP_API_KEY=your_api_key_here
 ### 直接使用客户端
 
 ```bash
-python mcp_client.py --query "北京今天的天气怎么样？" --verbose
+python mcp_client.py --query "weather for beijing？" --verbose
 ```
 
-### 使用 Cursor 命令行工具
 
-```bash
-python cursor_weather.py 北京今天的天气怎么样？
-```
 
 ### 在 Cursor 中配置
 
-1. 找到 Cursor 配置目录：
-   - Linux: `~/.cursor/mcp.json`
-   - macOS: `~/Library/Application Support/cursor/mcp.json`
-   - Windows: `%APPDATA%\cursor\mcp.json`
+1. 找到 Cursor 配置MCP servers：
+   - 添加command类型MCP Servers，命令为 python /path/to/your/mcp_server.py
 
-2. 编辑或创建 `mcp.json` 文件，添加以下内容：
-
-```json
-{
-  "mcpServers": {
-    "weather": {
-      "command": "python",
-      "args": ["/path/to/cursor_weather.py"],
-      "env": {
-        "OPENWEATHERMAP_API_KEY": "your_api_key_here"
-      }
-    }
-  }
-}
-```
-
-3. 重启 Cursor
-
-4. 在 Cursor 中使用 `/weather` 命令查询天气：
+4. 在 Cursor 中使用查询天气,只支持英文地址，如beijing， guangzhou，new york...：
 
 ```
-/weather 北京今天的天气怎么样？
+5 days weather forcast for New York
 ```
 
 ## 支持的查询类型
 
-- 城市天气查询：`北京今天的天气怎么样？`
+- 城市天气查询：`beijing今天的天气怎么样？`
 - 坐标天气查询：`纬度39.9，经度116.4的天气怎么样？`
-- 天气预报查询：`北京未来3天的天气预报`
+- 天气预报查询：`beijing未来3天的天气预报`
 
 ## 故障排除
 
 如果遇到问题，请尝试以下步骤：
 
-1. 确保 OpenWeatherMap API 密钥正确
-2. 检查网络连接
-3. 使用 `--verbose` 参数查看详细日志
-4. 确保已安装所有依赖项
+1. 启动dev模式，测试工具是否正常：
+  - uv run --with fastmcp fastmcp dev /mnt/hgfs/sharefolder/camelai2/mcp_server.py
 
 ## 许可证
 
